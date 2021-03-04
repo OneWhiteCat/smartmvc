@@ -89,8 +89,24 @@ public class DispatcherServlet extends HttpServlet {
         //viewName是视图名
         String viewName;
         try {
-            //调用处理器的方法,rv是处理器方法的返回值
-            Object rv=mh.invoke(obj);
+            //获得方法参数
+            Class[] types=mh.getParameterTypes();
+            Object rv=null;
+            if(types.length==0){//不带参
+                //调用处理器的方法,rv是处理器方法的返回值
+                rv=mh.invoke(obj);
+            }else{
+                Object[] params=new Object[types.length];
+                for(int i=0;i<types.length;i++){
+                    if(types[i]==HttpServletRequest.class){
+                        params[i]=request;
+                    }
+                    if (types[i]==HttpServletResponse.class){
+                        params[i]=response;
+                    }
+                }
+                rv=mh.invoke(obj,params);
+            }
             //获得视图名
             viewName=rv.toString();
             //依据模型返回的处理结果，调用相应的视图来展示
@@ -98,7 +114,6 @@ public class DispatcherServlet extends HttpServlet {
             //webContext 用来为模板引擎提供数据
             WebContext ctx=new WebContext(request,response,getServletContext());
             //将数据绑定到WebContext
-            ctx.setVariable("msg","Hello");
             response.setContentType("text/html;charset=utf-8");//设置mime类型,字符集是utf-8
             /*
                 reocess方法会利用前缀+视图名+后缀找到模板文件
