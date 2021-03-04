@@ -4,11 +4,10 @@ import core.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
+@RequestMapping("/dome")
 public class LoginController {
     @RequestMapping("/toLogin.do")
     public String toLogin(){
-
         return "login";
     }
     @RequestMapping("/login.do")

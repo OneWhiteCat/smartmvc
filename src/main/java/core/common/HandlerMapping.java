@@ -23,6 +23,13 @@ public class HandlerMapping {
     public void process(List beans) {
         //遍历处理器实例组成的集合
         for (Object obj:beans){
+            //获得加在类前的注解@RequestMapping
+            RequestMapping rc=obj.getClass().getAnnotation(RequestMapping.class);
+            //有可能为空
+            if(rc!=null){
+
+
+            }
             //获得处理器的方法
             Method[] methods= obj.getClass().getDeclaredMethods();
             //遍历所有方法

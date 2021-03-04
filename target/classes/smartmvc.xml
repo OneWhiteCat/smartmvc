@@ -2,10 +2,7 @@
 <beans>
     <!-- 配置处理器，class属性用于配置类名-->
     <bean class="controller.HelloController"/>
-<<<<<<< HEAD
     <bean class="controller.LoginController"/>
-=======
->>>>>>> 79f4d20fed62590a958bcf28787224f1866f705c
 
 </beans>
     

@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
  * 用于设置请求路径的注解
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
+@Target({ElementType.METHOD,ElementType.TYPE})//可以加在方法前也可以加在类前
 public @interface RequestMapping {
 
     public String value();
