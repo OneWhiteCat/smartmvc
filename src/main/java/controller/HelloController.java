@@ -14,7 +14,6 @@ public class HelloController {
         System.out.println("HelloController's hello()");
         //将数据绑定到request
         request.setAttribute("msg","Hello,SmartMVC!!!");
-
         return "hello";
     }
 
