@@ -16,7 +16,7 @@ public class LoginController {
         String password=request.getParameter("password");
         System.out.println(username+","+password);
         if("张三".equals(username)&&"test".equals(password)){
-            return "redirect:welcome.do";
+            return "redirect:dome/welcome.do";
         }
         request.setAttribute("login_msg","登陆失败");
         return "login";

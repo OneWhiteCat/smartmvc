@@ -26,9 +26,9 @@ public class HandlerMapping {
             //获得加在类前的注解@RequestMapping
             RequestMapping rc=obj.getClass().getAnnotation(RequestMapping.class);
             //有可能为空
+            String path1="";
             if(rc!=null){
-
-
+                path1=rc.value();
             }
             //获得处理器的方法
             Method[] methods= obj.getClass().getDeclaredMethods();
@@ -38,13 +38,13 @@ public class HandlerMapping {
                 RequestMapping rm = mh.getAnnotation(RequestMapping.class);
                 if (rm != null) {
                     //获得请求路径
-                    String path = rm.value();
+                    String path2= rm.value();
                     //将处理器实例封装到handler
                     Handler handler=new Handler();
                     handler.setObj(obj);
                     handler.setMh(mh);
                     //将请求路径与handler对象对应关系存放起来
-                    handlerMap.put(path,handler);
+                    handlerMap.put(path1+path2,handler);
                 }
             }
         }
