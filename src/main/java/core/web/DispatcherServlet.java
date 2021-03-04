@@ -3,12 +3,14 @@ package core.web;
 import core.common.Handler;
 import core.common.HandlerMapping;
 import core.common.ResourceManager;
+import core.common.ThymeleafViewResolver;
 import demo.HelloService;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.Thymeleaf;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
@@ -34,9 +36,10 @@ import java.util.List;
  */
 public class DispatcherServlet extends HttpServlet {
         private HandlerMapping handlerMapping;
+        private ThymeleafViewResolver viewResolver;
 
     public DispatcherServlet(){
-        System.out.println("DispatcherServlet's constructor()");
+
     }
 
     @Override
@@ -62,9 +65,12 @@ public class DispatcherServlet extends HttpServlet {
                 //将处理器实例保存起来
                 beans.add(obj);
             }
+            //创建映射处理器
             handlerMapping =new HandlerMapping();
             //将处理器实例交给HandlerMapping处理
             handlerMapping.process(beans);
+            //创建视图解析器
+            viewResolver =new ThymeleafViewResolver();
         } catch (Exception e) {
             e.printStackTrace();
             throw new ServletException(e);
@@ -73,6 +79,7 @@ public class DispatcherServlet extends HttpServlet {
 
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         System.out.println("DispatcherServlet's service()");
+        request.setCharacterEncoding("UTF-8");
         //获得请求路径
         String path=request.getServletPath();
         //依据HandlerMapping提供的信息来调用相应的处理器来处理请求
@@ -109,25 +116,14 @@ public class DispatcherServlet extends HttpServlet {
             }
             //获得视图名
             viewName=rv.toString();
-            //依据模型返回的处理结果，调用相应的视图来展示
-            TemplateEngine engine= ResourceManager.getInstance(getServletContext()).getEngine();
-            //webContext 用来为模板引擎提供数据
-            WebContext ctx=new WebContext(request,response,getServletContext());
-            //将数据绑定到WebContext
-            response.setContentType("text/html;charset=utf-8");//设置mime类型,字符集是utf-8
-            /*
-                reocess方法会利用前缀+视图名+后缀找到模板文件
-                然后利用ctx获得数据，生成相应的动态页面
-             */
-            engine.process(viewName,ctx,response.getWriter());
+            //调用视图解析器来处理视图名
+            viewResolver.processViewName(viewName,request,response,getServletContext());
 
         } catch (Exception e) {
             e.printStackTrace();
             throw new ServletException(e);
         }
 
-
     }
-
 
 }

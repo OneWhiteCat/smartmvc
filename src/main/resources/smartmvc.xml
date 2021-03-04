@@ -2,6 +2,7 @@
 <beans>
     <!-- 配置处理器，class属性用于配置类名-->
     <bean class="controller.HelloController"/>
+    <bean class="controller.LoginController"/>
 
 </beans>
     
